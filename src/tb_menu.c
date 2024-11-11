@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// private functions
 inline unsigned int max(unsigned int x, unsigned int y) {
   return x > y ? x : y;
 }
@@ -9,6 +10,15 @@ inline unsigned int max(unsigned int x, unsigned int y) {
 inline unsigned int min(unsigned int x, unsigned int y) {
   return x < y ? x : y;
 }
+
+inline void tb_menu_free_filtered_items(struct TbMenu* menu) {
+  if(menu->filtered_items != NULL)
+    free(menu->filtered_items);
+  menu->filtered_items = NULL;
+  menu->filtered_items_length = 0;
+}
+
+// public functions
 
 int tb_menu_draw(struct TbMenu* menu) {
   if(menu == NULL)
@@ -59,9 +69,45 @@ int tb_menu_draw(struct TbMenu* menu) {
   return TBM_SUCCESS;
 }
 
+int tb_menu_filter(struct TbMenu* menu, const char* filter) {
+  if(menu == NULL)
+    return TBM_FAILURE_NULL_ARGS;
+
+  tb_menu_free_filtered_items(menu);
+
+  if(filter == NULL || strlen(filter) == 0)
+    return TBM_SUCCESS;
+
+  unsigned int filtered_items_length = 0;
+  for(unsigned int i = 0; i < menu->items_length; i ++)
+    if(strstr((*(menu->items + i))->contents, filter) != NULL)
+      filtered_items_length ++;
+
+  if(filtered_items_length == 0)
+    return TBM_SUCCESS;
+
+  if((menu->filtered_items = (struct TbMenuItem**) malloc(filtered_items_length * sizeof(struct TbMenuItem*))) == NULL)
+    return TBM_FAILURE_MALLOC;
+
+  for(unsigned int i = 0, j = 0; i < menu->items_length; i ++)
+    if(strstr((*(menu->items + i))->contents, filter) != NULL) {
+      if(j > filtered_items_length)
+        break;
+
+      *(menu->filtered_items + j) = *(menu->items + i);
+      j ++;
+    }
+  menu->filtered_items_length = filtered_items_length;
+
+  return TBM_SUCCESS;
+}
+
 int tb_menu_get_items(struct TbMenu* menu, struct TbMenuItem*** output, unsigned int* output_length) {
   if(menu == NULL)
     return TBM_FAILURE_NULL_ARGS;
+
+  if(output == NULL && output_length == NULL)
+    return TBM_SUCCESS;
 
   if(menu->filtered_items != NULL) {
     if(output != NULL)
@@ -137,10 +183,7 @@ int tb_menu_uninit(struct TbMenu* menu) {
   menu->items = NULL;
   menu->items_length = 0;
 
-  if(menu->filtered_items != NULL)
-    free(menu->filtered_items);
-  menu->filtered_items = NULL;
-  menu->filtered_items_length = 0;
+  tb_menu_free_filtered_items(menu);
 
   return TBM_SUCCESS;
 }

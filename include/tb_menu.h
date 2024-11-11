@@ -36,6 +36,7 @@ struct TbMenu {
 };
 
 extern int tb_menu_draw(struct TbMenu* menu);
+extern int tb_menu_filter(struct TbMenu* menu, const char* filter);
 extern int tb_menu_get_items(struct TbMenu* menu, struct TbMenuItem*** output, unsigned int* output_length);
 extern int tb_menu_init(struct TbMenu* menu);
 extern int tb_menu_move_cursor(struct TbMenu* menu, int step);

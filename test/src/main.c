@@ -4,22 +4,16 @@
 
 int main(void) {
   struct TbMenuItem items[] = {
-    { TB_BLACK, TB_WHITE, "asdf" },
     { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_BLACK, TB_WHITE, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
-    { TB_WHITE, TB_BLACK, "asdf" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
+    { TB_WHITE, TB_BLACK, "fdsa" },
     { TB_WHITE, TB_BLACK, "asdf" },
     { TB_WHITE, TB_BLACK, "asdf" },
     { TB_WHITE, TB_BLACK, "asdf" },
@@ -37,6 +31,7 @@ int main(void) {
   tb_menu_init(&menu);
 
   tb_menu_set_items(&menu, (struct TbMenuItem*) items, ARRAY_LENGTH(items));
+  tb_menu_filter(&menu, "as");
 
   tb_init();
 
