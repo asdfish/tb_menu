@@ -12,6 +12,8 @@ PROCESSED_HEADER_FILES := $(subst .h,$\
 															.h.gch),$\
 														$(shell find include -name '*.h' -type f))
 
+BUILD_TEST := yes
+
 define COMPILE
 $(info Compiling $2)
 @${CC} -c $(1) ${C_FLAGS} -o $(2)
@@ -27,13 +29,17 @@ $(foreach ITEM,$\
 	$(call REMOVE,${ITEM}))
 endef
 
-all: libtb_menu.a
+all: libtb_menu.a $(if ${BUILD_TEST},test/test)
+
+include test.mk
 
 libtb_menu.a: ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 	$(info Linking $@)
 	@ar rcs $@ ${OBJECT_FILES}
 
 build/%.o: src/%.c
+	$(call COMPILE,$<,$@)
+test/build/%.o: test/src/%.c
 	$(call COMPILE,$<,$@)
 
 %.gch: %
