@@ -2,7 +2,7 @@ CC ?= cc
 C_FLAGS := -std=c99 $\
 					 -O2 -march=native -pipe $\
 					 -Wall -Wextra -Wpedantic $\
-					 -Iinclude
+					 -Iinclude -Ideps/termbox2
 OBJECT_FILES := $(patsubst src/%.c,$\
 									build/%.o,$\
 									$(shell find src -name '*.c' -type f))
