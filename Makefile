@@ -12,7 +12,8 @@ PROCESSED_HEADER_FILES := $(subst .h,$\
 															.h.gch),$\
 														$(shell find include -name '*.h' -type f))
 
-BUILD_TEST := yes
+# Uncomment to build tests
+# BUILD_TEST := yes
 TEST_OBJECT_FILES :=
 
 define COMPILE
