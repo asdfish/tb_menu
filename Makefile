@@ -1,10 +1,16 @@
 CC ?= cc
 C_FLAGS := -std=c99 $\
 					 -O2 -march=native -pipe $\
-					 -Wall -Wextra -Wpedantic
+					 -Wall -Wextra -Wpedantic $\
+					 -Iinclude
 OBJECT_FILES := $(patsubst src/%.c,$\
 									build/%.o,$\
 									$(shell find src -name '*.c' -type f))
+PROCESSED_HEADER_FILES := $(subst .h,$\
+														$(if $(findstring clang,${CC}),$\
+															.h.pch,$\
+															.h.gch),$\
+														$(shell find include -name '*.h' -type f))
 
 define COMPILE
 $(info Compiling $2)
@@ -23,11 +29,16 @@ endef
 
 all: libtb_menu.a
 
-libtb_menu.a: ${OBJECT_FILES}
+libtb_menu.a: ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 	$(info Linking $@)
-	@ar rcs $@ $<
+	@ar rcs $@ ${OBJECT_FILES}
 
 build/%.o: src/%.c
+	$(call COMPILE,$<,$@)
+
+%.gch: %
+	$(call COMPILE,$<,$@)
+%.pch: %
 	$(call COMPILE,$<,$@)
 
 clean:
