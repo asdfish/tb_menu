@@ -13,6 +13,7 @@ PROCESSED_HEADER_FILES := $(subst .h,$\
 														$(shell find include -name '*.h' -type f))
 
 BUILD_TEST := yes
+TEST_OBJECT_FILES :=
 
 define COMPILE
 $(info Compiling $2)
@@ -39,8 +40,6 @@ libtb_menu.a: ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 
 build/%.o: src/%.c
 	$(call COMPILE,$<,$@)
-test/build/%.o: test/src/%.c
-	$(call COMPILE,$<,$@)
 
 %.gch: %
 	$(call COMPILE,$<,$@)
@@ -50,5 +49,7 @@ test/build/%.o: test/src/%.c
 clean:
 	$(call REMOVE,libtb_menu.a)
 	$(call REMOVE_LIST,${OBJECT_FILES})
+	$(call REMOVE,test/test)
+	$(call REMOVE_LIST,${TEST_OBJECT_FILES})
 
 .PHONY: all clean
