@@ -1,0 +1,5 @@
+libtb_menu.a
+*.o
+test/test
+*.gch
+*.pch
