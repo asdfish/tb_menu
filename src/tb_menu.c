@@ -42,9 +42,6 @@ int tb_menu_draw(struct TbMenu* menu) {
   if(tb_menu_get_items(menu, &items, &items_length) != TBM_SUCCESS)
     return TBM_FAILURE_NULL_ARGS;
 
-  tb_printf(69, 0, 0, 0, "%u", menu->items_length);
-  tb_printf(69, 1, 0, 0, "%u", items_length);
-
   for(unsigned int i = 0; i < menu->height; i ++) {
     unsigned int item_y = menu->camera + i;
     unsigned int cell_y = menu->y + i;
