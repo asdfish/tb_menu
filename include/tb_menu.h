@@ -25,7 +25,9 @@ struct TbMenu {
 
   uintattr_t background, background_reversed;
 
-  bool selected;                              // do not change
+  bool enable_reversed_colors;
+
+  bool enable_selection;                      // do not change
   unsigned int selection;                     // do not change
 
   struct TbMenuItem** items;                  // do not change

@@ -51,10 +51,11 @@ int tb_menu_draw(struct TbMenu* menu) {
     struct TbMenuItem* item = *(items + item_y);
 
     bool reverse_color = false;
-    if(item_y == menu->cursor ||
-        (menu->selected &&
+    if(menu->enable_reversed_colors &&
+        (item_y == menu->cursor ||
+        (menu->enable_selection &&
          item_y >= min(menu->selection, menu->cursor) &&
-         item_y <= max(menu->selection, menu->cursor)))
+         item_y <= max(menu->selection, menu->cursor))))
       reverse_color = true;
 
     uintattr_t foreground = reverse_color ? item->foreground_reversed : item->foreground;
@@ -131,7 +132,7 @@ int tb_menu_init(struct TbMenu* menu) {
   menu->camera = 0;
   menu->cursor = 0;
 
-  menu->selected = false;
+  menu->enable_selection = false;
   menu->selection = 0;
 
   menu->items = NULL;

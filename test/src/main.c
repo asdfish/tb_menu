@@ -27,6 +27,7 @@ int main(void) {
   menu.height = 10;
   menu.background = TB_BLACK;
   menu.background_reversed = TB_WHITE;
+  menu.enable_reversed_colors = false;
 
   tb_menu_init(&menu);
 
