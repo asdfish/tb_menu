@@ -6,15 +6,21 @@ C_FLAGS := -std=c99 $\
 OBJECT_FILES := $(patsubst src/%.c,$\
 									build/%.o,$\
 									$(shell find src -name '*.c' -type f))
-PROCESSED_HEADER_FILES := $(subst .h,$\
-														$(if $(findstring clang,${CC}),$\
-															.h.pch,$\
-															.h.gch),$\
-														$(shell find include -name '*.h' -type f))
+
+# Uncomment to process header files
+# PROCESS_HEADER_FILES := yes
+PROCESSED_HEADER_FILES :=	$(if ${PROCESS_HEADER_FILES},$\
+														$(subst .h,$\
+															$(if $(findstring clang,${CC}),$\
+																.h.pch,$\
+																.h.gch),$\
+															$(shell find include -name '*.h' -type f)))
 
 # Uncomment to build tests
 # BUILD_TEST := yes
 TEST_OBJECT_FILES :=
+
+LIBTB_MENU_A_REQUIREMENTS := ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 
 define COMPILE
 $(info Compiling $2)
@@ -35,7 +41,7 @@ all: libtb_menu.a $(if ${BUILD_TEST},test/test)
 
 include test.mk
 
-libtb_menu.a: ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
+libtb_menu.a: ${LIBTB_MENU_A_REQUIREMENTS}
 	$(info Linking $@)
 	@ar rcs $@ ${OBJECT_FILES}
 
@@ -49,7 +55,7 @@ build/%.o: src/%.c
 
 clean:
 	$(call REMOVE,libtb_menu.a)
-	$(call REMOVE_LIST,${OBJECT_FILES})
+	$(call REMOVE_LIST,${LIBTB_MENU_A_REQUIREMENTS})
 	$(call REMOVE,test/test)
 	$(call REMOVE_LIST,${TEST_OBJECT_FILES})
 
