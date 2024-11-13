@@ -3,22 +3,22 @@
 #include <string.h>
 
 // private functions
-inline unsigned int max(unsigned int x, unsigned int y) {
+static inline unsigned int max(unsigned int x, unsigned int y) {
   return x > y ? x : y;
 }
 
-inline unsigned int min(unsigned int x, unsigned int y) {
+static inline unsigned int min(unsigned int x, unsigned int y) {
   return x < y ? x : y;
 }
 
-inline void tb_menu_free_items(struct TbMenu* menu) {
+static inline void tb_menu_free_items(struct TbMenu* menu) {
   if(menu->items != NULL)
     free(menu->items);
   menu->items = NULL;
   menu->items_length = 0;
 }
 
-inline void tb_menu_free_filtered_items(struct TbMenu* menu) {
+static inline void tb_menu_free_filtered_items(struct TbMenu* menu) {
   if(menu->filtered_items != NULL)
     free(menu->filtered_items);
   menu->filtered_items = NULL;
