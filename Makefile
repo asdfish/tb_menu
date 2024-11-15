@@ -17,19 +17,19 @@ PROCESSED_HEADER_FILES :=	$(if ${PROCESS_HEADER_FILES},$\
 															$(shell find include -name '*.h' -type f)))
 
 # Uncomment to build tests
-# BUILD_TEST := yes
+BUILD_TEST := yes
 TEST_OBJECT_FILES :=
 
 LIBTB_MENU_A_REQUIREMENTS := ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 
 define COMPILE
-$(info Compiling $2)
-@${CC} -c $(1) ${C_FLAGS} -o $(2)
+${CC} -c $(1) ${C_FLAGS} -o $(2)
+
 endef
 define REMOVE
 $(if $(wildcard $(1)),$\
-	$(info Removing $(1))
-	$(shell rm $(1)))
+	rm $(1))
+
 endef
 define REMOVE_LIST
 $(foreach ITEM,$\
@@ -42,8 +42,7 @@ all: libtb_menu.a $(if ${BUILD_TEST},test/test)
 include test.mk
 
 libtb_menu.a: ${LIBTB_MENU_A_REQUIREMENTS}
-	$(info Linking $@)
-	@ar rcs $@ ${OBJECT_FILES}
+	ar rcs $@ ${OBJECT_FILES}
 
 build/%.o: src/%.c
 	$(call COMPILE,$<,$@)
