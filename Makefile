@@ -1,8 +1,7 @@
 CC ?= cc
-C_FLAGS := -std=c99 $\
-					 -O2 -march=native -pipe $\
-					 -Wall -Wextra -Wpedantic $\
-					 -Iinclude -Ideps/termbox2
+CFLAGS ?= -O2 -march=native -pipe
+COMMONFLAGS := -Wall -Wextra -Wpedantic $\
+							 -Iinclude -Ideps/termbox2
 OBJECT_FILES := $(patsubst src/%.c,$\
 									build/%.o,$\
 									$(shell find src -name '*.c' -type f))
@@ -16,14 +15,13 @@ PROCESSED_HEADER_FILES :=	$(if ${PROCESS_HEADER_FILES},$\
 																.h.gch),$\
 															$(shell find include -name '*.h' -type f)))
 
-# Uncomment to build tests
-BUILD_TEST := yes
-TEST_OBJECT_FILES :=
+# Uncomment/comment to enable/disable tests
+# BUILD_TEST := yes
 
 LIBTB_MENU_A_REQUIREMENTS := ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 
 define COMPILE
-${CC} -c $(1) ${C_FLAGS} -o $(2)
+${CC} -c $(1) $(CFLAGS) ${COMMONFLAGS} -o $(2)
 
 endef
 define REMOVE
@@ -37,9 +35,11 @@ $(foreach ITEM,$\
 	$(call REMOVE,${ITEM}))
 endef
 
-all: libtb_menu.a $(if ${BUILD_TEST},test/test)
-
+ifndef (,${BUILD_TEST})
 include test.mk
+endif
+
+all: libtb_menu.a $(if ${BUILD_TEST},test/test)
 
 libtb_menu.a: ${LIBTB_MENU_A_REQUIREMENTS}
 	ar rcs $@ ${OBJECT_FILES}
